@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>       
+struct bag{
+    double w,p,r;
+};
+int cmp(const void *a,const void *b)
+{
+    struct bag *x=(struct bag *)a,*y=(struct bag *)b;
+    if(x->r < y->r) return 1;
+    else if(x->r > y->r) return -1;
+    else return 0;
+}
+int main() {
+
+    int n,m;int i;
+    scanf("%d %d",&n,&m);
+    struct bag a[n];               // when u need to sort a array based on the sorting of another array created from it always use a struct.
+    for(i=0;i<n;i++) 
+    {
+        scanf("%lf %lf",&a[i].w,&a[i].p);   // we have three arrays now in which r array is created from w and p.
+        a[i].r=a[i].p/a[i].w;             //now if we sort the struct array based on r we will have the other 2 arrays based on r. it goes vice versa too.
+    }
+    qsort(a,n,sizeof(struct bag),cmp);   
+    double p=0;i=0;
+    while(i<n && a[i].w<=m)             // now the highest ratio filled is filled first as the ratio is in descending order
+    {
+        p+=a[i].p;
+        m-=a[i].w;
+        i++;
+    }
+    if(i<n && m>0)               // when the bag is not filled completely the remaining ratio is filled 
+    {
+        p+=m*a[i].r;
+        m=0;
+    }
+    if(i==n && m>0) printf("-1");
+    else printf("%.12lf",p);
+    
+ return 0;
+}
